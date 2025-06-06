@@ -14,7 +14,8 @@ int main(int argc, char** argv)
   try {
     std::ifstream in(filename);
     if (!in.is_open()) {
-      throw std::logic_error("Failed to open file: " + args.filename);
+      std::cerr << "Failed to open file: " + std::string(filename) << '\n';
+      return 1;
     }
     using namespace kizhin;
     using InIt = std::istream_iterator< Polygon >;

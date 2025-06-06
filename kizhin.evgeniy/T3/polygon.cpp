@@ -33,11 +33,9 @@ std::istream& kizhin::operator>>(std::istream& in, Polygon& dest)
     in.setstate(std::ios::failbit);
     return in;
   }
-  std::istream& s = in;
   using InIt = std::istream_iterator< Point >;
-  PointContainer points;
-  points.reserve(size);
-  points.insert(points.end(), InIt{ s }, InIt{});
+  PointContainer points(size);
+  points.assign(InIt{ in }, InIt{});
   if (points.size() == size) {
     dest.points = std::move(points);
     in.clear();
