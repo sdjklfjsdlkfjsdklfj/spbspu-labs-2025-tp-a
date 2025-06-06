@@ -2,11 +2,10 @@
 #include <algorithm>
 #include <istream>
 #include <iterator>
+#include <interim-input-utils.hpp>
 #include <stream-guard.hpp>
 
 namespace kizhin {
-  struct Delimiter;
-  std::istream& operator>>(std::istream&, Delimiter&&);
   std::istream& operator>>(std::istream&, Point&);
 }
 
@@ -43,11 +42,6 @@ std::istream& kizhin::operator>>(std::istream& in, Polygon& dest)
   return in;
 }
 
-struct kizhin::Delimiter
-{
-  char val = 0;
-};
-
 std::istream& kizhin::operator>>(std::istream& in, Point& dest)
 {
   std::istream::sentry sentry(in);
@@ -59,19 +53,6 @@ std::istream& kizhin::operator>>(std::istream& in, Point& dest)
   in >> Delimiter{ '(' } >> input.x >> Delimiter{ ';' };
   if (in >> input.y >> Delimiter{ ')' }) {
     dest = input;
-  }
-  return in;
-}
-
-std::istream& kizhin::operator>>(std::istream& in, Delimiter&& dest)
-{
-  std::istream::sentry sentry(in);
-  if (!sentry) {
-    return in;
-  }
-  if (in.get() != dest.val) {
-    in.unget();
-    in.setstate(std::ios::failbit);
   }
   return in;
 }
